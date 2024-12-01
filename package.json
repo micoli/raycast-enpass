@@ -1,0 +1,88 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "enpass",
+  "title": "enpass",
+  "description": "Enpass Query helper",
+  "icon": "extension-icon.png",
+  "author": "micoli",
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "enpass",
+      "title": "Enpass query",
+      "description": "enpass query",
+      "mode": "view"
+    },
+    {
+      "name": "expire-master-password",
+      "title": "Expire Cached MasterPassword",
+      "description": "Automatically clean master password when it expires",
+      "mode": "no-view",
+      "interval": "50s"
+    }
+  ],
+  "preferences": [
+    {
+      "name": "enpassCliBinary",
+      "type": "textfield",
+      "required": true,
+      "title": "enpass-cli binary",
+      "description": "full path to enpass-cli",
+      "placeholder": "enpass-cli",
+      "default": "/opt/homebrew/bin/enpass-cli"
+    },
+    {
+      "name": "enpassVaultPath",
+      "type": "textfield",
+      "required": true,
+      "title": "vault path",
+      "description": "full path to Vault path",
+      "placeholder": "vault-path",
+      "default": "/Users/username/Documents/Enpass/Vaults/primary/"
+    },
+    {
+      "name": "masterPasswordTimeout",
+      "type": "dropdown",
+      "required": true,
+      "title": "MasterPassword Timeout",
+      "description": "MasterPassword cache timeout",
+      "default": "1800",
+      "data": [{
+          "title": "1 min", "value": "60"
+      },{
+          "title": "10 min", "value": "600"
+      },{
+          "title": "30 min", "value": "1800"
+      },{
+          "title": "60 min", "value": "3600"
+      },{
+          "title": "90 min", "value": "5400"
+      },{
+          "title": "120 min", "value": "7200"
+      }]
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.85.0",
+    "@raycast/utils": "^1.18.0",
+    "execa": "^9.5.1",
+    "p-debounce": "^4.0.0",
+    "run-applescript": "^7.0.0"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^1.0.11",
+    "@types/node": "20.8.10",
+    "@types/react": "18.3.3",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.4.5"
+  },
+  "scripts": {
+    "build": "ray build",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "prepublishOnly": "echo \"\\n\\nIt seems like you are trying to publish the Raycast extension to npm.\\n\\nIf you did intend to publish it to npm, remove the \\`prepublishOnly\\` script and rerun \\`npm publish\\` again.\\nIf you wanted to publish it to the Raycast Store instead, use \\`npm run publish\\` instead.\\n\\n\" && exit 1",
+    "publish": "npx @raycast/api@latest publish"
+  }
+}
