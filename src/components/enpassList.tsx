@@ -13,7 +13,7 @@ import {
 
 import { useEffect, useState } from "react";
 import { EnpassEntry, searchEntries } from "../lib/enpass-cli";
-import pDebounce from "p-debounce";
+import { useDebounce } from "@uidotdev/usehooks";
 import { useToggle } from "../hooks/useToggle";
 import { preferences } from "../lib/preferences";
 import { getCachedMasterPassword } from "../lib/cache";
@@ -39,6 +39,7 @@ export default function EnpassList({ masterPassword }: { masterPassword: string 
   const [filter, setFilter] = useState<string>("");
   const [isDetailedViewEnabled, showDetailedView, hideDetailedView] = useToggle(true);
   const [isPasswordViewable, setPasswordIsViewable, setPasswordIsNotViewable] = useToggle(false);
+  const debouncedFilter = useDebounce(filter, 200);
 
   useInterval(() => {
     if (null !== getCachedMasterPassword()) {
@@ -54,7 +55,7 @@ export default function EnpassList({ masterPassword }: { masterPassword: string 
     });
   }, 30 * 1000);
 
-  const fetchAndSetEntries = pDebounce(async () => {
+  const fetchAndSetEntries = async () => {
     if (filter === "") {
       setEntries([]);
       return;
@@ -70,11 +71,11 @@ export default function EnpassList({ masterPassword }: { masterPassword: string 
     } catch (error) {
       await showToast({ style: Toast.Style.Failure, title: String(error) });
     }
-  }, 600);
+  };
 
   useEffect(() => {
     fetchAndSetEntries().then();
-  }, [filter]);
+  }, [debouncedFilter]);
 
   useEffect(() => {
     fetchAndSetEntries().then();

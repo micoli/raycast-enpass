@@ -27,10 +27,9 @@ export async function searchEntries(
     const env = {
       MASTERPW: masterPassword,
     };
-    const verbose = "none";
     const result = await execa({
       env,
-      verbose,
+      verbose: "short",
     })`${enpassCliBinary} -json --vault=${enpassVaultPath} -sort show ${filter.trim()}`;
     let idx = 0;
     return JSON.parse(result.stdout).map((entry) => {
@@ -57,11 +56,10 @@ export async function checkMasterPassword(
     const env = {
       MASTERPW: masterPassword,
     };
-    const verbose = "none";
     const filter = "01JE1KT064F4KJ0RY37R8S8YCD01JE1KT7YV2SPSMH8R0RWR3KGX01JE1KTJK6ECSSKGEK9MQFP089";
     await execa({
       env,
-      verbose,
+      verbose: "none",
     })`${enpassCliBinary} -json --vault=${enpassVaultPath} -sort show ${filter}`;
     return DatabaseConnectionStatus.Ok;
   } catch (error) {

@@ -23,9 +23,13 @@ export default function Command({ setMasterPassword }: { setMasterPassword: (str
       setPasswordResult(DatabaseConnectionStatus.IncorrectPassword);
       return;
     }
-    checkMasterPassword(preferences.enpassCliBinary, preferences.enpassVaultPath, password).then((result) =>
-      result === DatabaseConnectionStatus.Ok ? setPasswordResult(null) : setPasswordResult(result),
-    );
+    checkMasterPassword(preferences.enpassCliBinary, preferences.enpassVaultPath, password).then((result) => {
+      if (result === DatabaseConnectionStatus.Ok) {
+        setMasterPassword(password);
+        return;
+      }
+      setPasswordResult(result);
+    });
   };
 
   return (
@@ -34,9 +38,9 @@ export default function Command({ setMasterPassword }: { setMasterPassword: (str
         <ActionPanel>
           <Action.SubmitForm
             title="Submit Password"
-            onSubmit={(values) => {
+            onSubmit={() => {
               if (passwordResult === DatabaseConnectionStatus.Ok || passwordResult === null) {
-                setMasterPassword(values.password);
+                setMasterPassword(password);
                 return;
               }
               showToast({
